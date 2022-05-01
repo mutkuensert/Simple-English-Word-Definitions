@@ -19,12 +19,12 @@ import com.mutkuensert.simpleenglishworddefinitions.ui.theme.LightBlue
 fun MainScreen() {
     Surface(modifier = Modifier.fillMaxSize(),
     color = MaterialTheme.colors.primary) {
-        searchArea()
+        SearchArea()
     }
 }
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun searchArea(){
+fun SearchArea(){
     val (searchText, setText) = remember { mutableStateOf("") }
     var contentVisibility by remember { mutableStateOf(false)}
 
