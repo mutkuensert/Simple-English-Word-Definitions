@@ -9,8 +9,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MainScreenViewModel: ViewModel() {
-    val response = MutableLiveData<List<MainModel>>()
-    val retrofit = RetrofitApi()
+    val response = MutableLiveData<List<MainModel>>(listOf(MainModel(null,null,null)))
+    private val retrofit = RetrofitApi()
 
     fun requestDefinition(word: String){
         viewModelScope.launch(Dispatchers.IO) {

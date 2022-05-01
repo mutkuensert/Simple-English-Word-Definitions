@@ -8,27 +8,29 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import com.mutkuensert.simpleenglishworddefinitions.ui.theme.DarkBlue
 import com.mutkuensert.simpleenglishworddefinitions.ui.theme.LightBlue
+import com.mutkuensert.simpleenglishworddefinitions.viewmodel.MainScreenViewModel
 
 @Composable
-fun MainScreen() {
+fun MainScreen(viewModel: MainScreenViewModel) {
     Surface(modifier = Modifier.fillMaxSize(),
-    color = MaterialTheme.colors.primary) {
-        SearchArea()
+    color = MaterialTheme.colors.surface) {
+        SearchArea(viewModel = viewModel)
     }
 }
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun SearchArea(){
+fun SearchArea(viewModel: MainScreenViewModel){
     val (searchText, setText) = remember { mutableStateOf("") }
     var contentVisibility by remember { mutableStateOf(false)}
 
-    var response by remember { mutableStateOf("Response")}
+    var response = viewModel.response.observeAsState()
 
     Column(modifier = Modifier
         .fillMaxWidth()
@@ -41,7 +43,7 @@ fun SearchArea(){
             .padding(12.dp)
             .shadow(elevation = 10.dp)
             .fillMaxWidth(),
-            backgroundColor = MaterialTheme.colors.primary) {
+            backgroundColor = MaterialTheme.colors.surface) {
             
             Row(verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(vertical = 10.dp)) {
@@ -53,11 +55,15 @@ fun SearchArea(){
 
                 Spacer(modifier = Modifier.width(20.dp))
 
-                Button(onClick = { contentVisibility = !contentVisibility },
+                Button(onClick = {
+                    contentVisibility = true
+                    viewModel.requestDefinition(searchText)
+                                 },
                     elevation = ButtonDefaults.elevation(defaultElevation = 10.dp),
                     modifier = Modifier
                         .weight(2f)
-                        .padding(end = 15.dp)) {
+                        .padding(end = 15.dp),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.surface)) {
                     Text(text = "Search")
                 }
             }
@@ -68,9 +74,9 @@ fun SearchArea(){
                 .padding(12.dp)
                 .shadow(elevation = 10.dp)
                 .fillMaxWidth(),
-                backgroundColor = MaterialTheme.colors.primary) {
+                backgroundColor = MaterialTheme.colors.surface) {
                 AnimatedContent(targetState = response, modifier = Modifier.padding(10.dp)) {
-                    Text(text = response)
+                    Text(text = response.value.toString())
                 }
             }
         }
@@ -84,6 +90,8 @@ fun CustomTextField(text: String, setValue: (String)-> Unit, modifier: Modifier 
         value = text,
         onValueChange = setValue,
         label = { Text("Search") },
-        singleLine = true,
-        colors = TextFieldDefaults.outlinedTextFieldColors(focusedBorderColor = LightBlue, focusedLabelColor = DarkBlue, unfocusedBorderColor = LightBlue))
+        singleLine = true
+        /*,colors = TextFieldDefaults.outlinedTextFieldColors(focusedBorderColor = LightBlue,
+            focusedLabelColor = DarkBlue,
+            unfocusedBorderColor = LightBlue, cursorColor = DarkBlue, leadingIconColor = DarkBlue)*/)
 }
