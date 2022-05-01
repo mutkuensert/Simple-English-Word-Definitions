@@ -7,7 +7,7 @@ import retrofit2.http.Query
 interface WordService {
 
     @GET("words")
-    fun requestDefinition(
+    suspend fun requestDefinition(
         @Query("sp") sp: String,
         @Query("md") md: String
     ): MainModel
