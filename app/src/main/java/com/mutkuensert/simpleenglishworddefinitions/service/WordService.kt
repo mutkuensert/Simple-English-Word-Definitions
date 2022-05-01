@@ -10,5 +10,5 @@ interface WordService {
     suspend fun requestDefinition(
         @Query("sp") sp: String,
         @Query("md") md: String
-    ): MainModel
+    ): List<MainModel>
 }

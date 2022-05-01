@@ -11,7 +11,7 @@ class RetrofitApi {
         .addConverterFactory(MoshiConverterFactory.create())
         .build().create(WordService::class.java)
 
-    suspend fun requestDefinition(word: String): MainModel{
+    suspend fun requestDefinition(word: String): List<MainModel>{
         return api.requestDefinition(word,"d") //d means definition in api.
     }
 }
