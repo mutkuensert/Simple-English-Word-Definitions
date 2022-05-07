@@ -6,11 +6,14 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -29,7 +32,6 @@ fun MainScreen(context: Context,viewModel: MainScreenViewModel) {
     }
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun SearchArea(context: Context,viewModel: MainScreenViewModel){
     val (searchText, setText) = remember { mutableStateOf("") }
@@ -64,8 +66,8 @@ fun SearchArea(context: Context,viewModel: MainScreenViewModel){
 
     Column(modifier = Modifier
         .fillMaxWidth()
-        .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally) {
+        //.verticalScroll(rememberScrollState())
+        ,horizontalAlignment = Alignment.CenterHorizontally) {
 
         Spacer(modifier = Modifier.height(35.dp))
 
@@ -102,8 +104,33 @@ fun SearchArea(context: Context,viewModel: MainScreenViewModel){
                 .shadow(elevation = 10.dp)
                 .fillMaxWidth(),
                 backgroundColor = MaterialTheme.colors.surface) {
-                AnimatedContent(targetState = response, modifier = Modifier.padding(10.dp)) {
-                    Text(text = response.value!!.data.toString())
+                LazyColumn(modifier = Modifier.padding(10.dp)){
+                    response.value!!.data?.let { //Response.value is non-null because it was assigned with a default in view model.
+                        items(it){item->
+                            Row{
+                                Text(text = item.word.toString(), modifier = Modifier.weight(1f))
+                                Spacer(modifier = Modifier.width(3.dp))
+                                Column(modifier = Modifier.weight(3f)) {
+                                    item.defs?.let { defsList->
+                                        for (i in defsList){
+                                            Text(text = i.toString())
+                                            Spacer(modifier = Modifier.height(3.dp))
+                                            Divider(modifier = Modifier.fillMaxWidth())
+                                            Spacer(modifier = Modifier.height(3.dp))
+                                        }
+                                    }
+
+                                }
+                            }
+                            if(it.size>1){
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Divider(modifier = Modifier.fillMaxWidth().height(3.dp))
+                                Spacer(modifier = Modifier.height(8.dp))
+                            }
+
+                        }
+                    }
+
                 }
             }
         }
@@ -114,9 +141,14 @@ fun SearchArea(context: Context,viewModel: MainScreenViewModel){
                 .shadow(elevation = 10.dp)
                 .fillMaxWidth(),
                 backgroundColor = MaterialTheme.colors.surface) {
-                CircularProgressIndicator(modifier = Modifier.padding(20.dp).requiredHeight(80.dp).requiredWidth(80.dp), strokeWidth = 4.dp)
+                CircularProgressIndicator(modifier = Modifier
+                    .padding(20.dp)
+                    .requiredHeight(80.dp)
+                    .requiredWidth(80.dp), strokeWidth = 4.dp)
             }
         }
+
+        Spacer(modifier = Modifier.height(35.dp))
     }
 }
 
