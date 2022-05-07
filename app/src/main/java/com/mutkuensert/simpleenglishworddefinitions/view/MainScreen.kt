@@ -114,9 +114,12 @@ fun SearchArea(context: Context,viewModel: MainScreenViewModel){
                                     item.defs?.let { defsList->
                                         for (i in defsList){
                                             Text(text = i.toString())
-                                            Spacer(modifier = Modifier.height(3.dp))
-                                            Divider(modifier = Modifier.fillMaxWidth())
-                                            Spacer(modifier = Modifier.height(3.dp))
+                                            if(defsList.size>1){
+                                                Spacer(modifier = Modifier.height(3.dp))
+                                                Divider(modifier = Modifier.fillMaxWidth())
+                                                Spacer(modifier = Modifier.height(3.dp))
+                                            }
+
                                         }
                                     }
 
