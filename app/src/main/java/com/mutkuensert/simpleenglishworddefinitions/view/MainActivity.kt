@@ -15,7 +15,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             SimpleEnglishWordDefinitionsTheme {
                 // A surface container using the 'background' color from the theme
-                MainScreen(viewModel = viewModel)
+                MainScreen(applicationContext ,viewModel = viewModel)
             }
         }
     }

@@ -1,6 +1,7 @@
 package com.mutkuensert.simpleenglishworddefinitions.service
 
 import com.mutkuensert.simpleenglishworddefinitions.model.MainModel
+import com.mutkuensert.simpleenglishworddefinitions.util.Resource
 import com.mutkuensert.simpleenglishworddefinitions.util.Util
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -17,7 +18,19 @@ class RetrofitApi {
         .addConverterFactory(MoshiConverterFactory.create(moshi))
         .build().create(WordService::class.java)
 
-    suspend fun requestDefinition(word: String): List<MainModel>{
-        return api.requestDefinition(word,"d") //d means definition in api.
+    suspend fun requestDefinition(word: String): Resource<List<MainModel>>{
+        return try {
+            val response = api.requestDefinition(word,"d") //d means definition in api.
+            if(response.isSuccessful){
+                response.body()?.let {
+                    return Resource.success(it)
+                }?: Resource.error("Error",null)
+            }else{
+                return Resource.error("Error",null)
+            }
+        }catch (e: Exception){
+            println("Error on request.")
+            return Resource.error("Error",null)
+        }
     }
 }

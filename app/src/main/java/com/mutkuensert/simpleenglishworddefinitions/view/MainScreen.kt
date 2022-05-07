@@ -1,5 +1,7 @@
 package com.mutkuensert.simpleenglishworddefinitions
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -15,22 +17,50 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import com.mutkuensert.simpleenglishworddefinitions.ui.theme.DarkBlue
 import com.mutkuensert.simpleenglishworddefinitions.ui.theme.LightBlue
+import com.mutkuensert.simpleenglishworddefinitions.util.Resource
+import com.mutkuensert.simpleenglishworddefinitions.util.Status
 import com.mutkuensert.simpleenglishworddefinitions.viewmodel.MainScreenViewModel
 
 @Composable
-fun MainScreen(viewModel: MainScreenViewModel) {
+fun MainScreen(context: Context,viewModel: MainScreenViewModel) {
     Surface(modifier = Modifier.fillMaxSize(),
     color = MaterialTheme.colors.surface) {
-        SearchArea(viewModel = viewModel)
+        SearchArea(context, viewModel = viewModel)
     }
 }
+
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun SearchArea(viewModel: MainScreenViewModel){
+fun SearchArea(context: Context,viewModel: MainScreenViewModel){
     val (searchText, setText) = remember { mutableStateOf("") }
     var contentVisibility by remember { mutableStateOf(false)}
+    var loading by remember { mutableStateOf(false)}
 
     var response = viewModel.response.observeAsState()
+
+    when(response.value?.status){
+        Status.STANDBY->{
+            contentVisibility = false
+            loading = false
+        }
+
+        Status.LOADING->{
+            contentVisibility = false
+            loading = true
+        }
+
+        Status.SUCCESS->{
+            contentVisibility = true
+            loading = false
+        }
+
+        Status.ERROR->{
+            contentVisibility = false
+            loading = false
+            Toast.makeText(context,"Error",Toast.LENGTH_LONG).show()
+        }
+
+    }
 
     Column(modifier = Modifier
         .fillMaxWidth()
@@ -55,10 +85,7 @@ fun SearchArea(viewModel: MainScreenViewModel){
 
                 Spacer(modifier = Modifier.width(20.dp))
 
-                Button(onClick = {
-                    contentVisibility = true
-                    viewModel.requestDefinition(searchText)
-                                 },
+                Button(onClick = {viewModel.requestDefinition(searchText)},
                     elevation = ButtonDefaults.elevation(defaultElevation = 10.dp),
                     modifier = Modifier
                         .weight(2f)
@@ -76,8 +103,18 @@ fun SearchArea(viewModel: MainScreenViewModel){
                 .fillMaxWidth(),
                 backgroundColor = MaterialTheme.colors.surface) {
                 AnimatedContent(targetState = response, modifier = Modifier.padding(10.dp)) {
-                    Text(text = response.value.toString())
+                    Text(text = response.value!!.data.toString())
                 }
+            }
+        }
+
+        AnimatedVisibility(visible = loading) {
+            Card(modifier = Modifier
+                .padding(12.dp)
+                .shadow(elevation = 10.dp)
+                .fillMaxWidth(),
+                backgroundColor = MaterialTheme.colors.surface) {
+                CircularProgressIndicator(modifier = Modifier.padding(20.dp).requiredHeight(80.dp).requiredWidth(80.dp), strokeWidth = 4.dp)
             }
         }
     }
