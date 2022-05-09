@@ -74,7 +74,8 @@ dependencies {
 
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
 
-    implementation "com.google.accompanist:accompanist-flowlayout:0.23.1"
+    implementation "com.google.accompanist:accompanist-flowlayout:0.24.7-alpha"
+    implementation "com.google.accompanist:accompanist-systemuicontroller:0.24.7-alpha"
 
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
