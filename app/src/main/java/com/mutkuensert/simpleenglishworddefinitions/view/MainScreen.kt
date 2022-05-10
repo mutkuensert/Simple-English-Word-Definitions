@@ -65,11 +65,11 @@ fun SearchArea(context: Context,viewModel: MainScreenViewModel){
     }
 
     Column(modifier = Modifier
-        .fillMaxWidth()
+        .fillMaxWidth().padding(bottom = 10.dp)
         //.verticalScroll(rememberScrollState())
         ,horizontalAlignment = Alignment.CenterHorizontally) {
 
-        Spacer(modifier = Modifier.height(35.dp))
+        Spacer(modifier = Modifier.height(10.dp))
 
         Card(modifier = Modifier
             .padding(12.dp)
