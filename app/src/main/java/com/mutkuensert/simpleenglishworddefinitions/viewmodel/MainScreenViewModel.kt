@@ -8,8 +8,11 @@ import com.mutkuensert.simpleenglishworddefinitions.service.RetrofitApi
 import com.mutkuensert.simpleenglishworddefinitions.util.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class MainScreenViewModel: ViewModel() {
+@Singleton
+class MainScreenViewModel @Inject constructor() : ViewModel() {
     val response = MutableLiveData<Resource<List<MainModel>>>(Resource.standby(listOf(MainModel(null,null,null))))
     private val retrofit = RetrofitApi()
 

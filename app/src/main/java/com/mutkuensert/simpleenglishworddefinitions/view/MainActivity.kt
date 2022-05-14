@@ -7,10 +7,13 @@ import androidx.activity.viewModels
 import com.mutkuensert.simpleenglishworddefinitions.MainScreen
 import com.mutkuensert.simpleenglishworddefinitions.ui.theme.SimpleEnglishWordDefinitionsTheme
 import com.mutkuensert.simpleenglishworddefinitions.viewmodel.MainScreenViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @Inject lateinit var viewModel: MainScreenViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
-        val viewModel: MainScreenViewModel by viewModels()
         super.onCreate(savedInstanceState)
         setContent {
             SimpleEnglishWordDefinitionsTheme {
