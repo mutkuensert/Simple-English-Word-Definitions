@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mutkuensert.simpleenglishworddefinitions.model.MainModel
-import com.mutkuensert.simpleenglishworddefinitions.service.RetrofitApi
+import com.mutkuensert.simpleenglishworddefinitions.service.WordService
 import com.mutkuensert.simpleenglishworddefinitions.util.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -12,14 +12,25 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class MainScreenViewModel @Inject constructor() : ViewModel() {
+class MainScreenViewModel @Inject constructor(val api: WordService) : ViewModel() {
     val response = MutableLiveData<Resource<List<MainModel>>>(Resource.standby(listOf(MainModel(null,null,null))))
-    private val retrofit = RetrofitApi()
 
     fun requestDefinition(word: String){
         viewModelScope.launch(Dispatchers.IO) {
             response.postValue(Resource.loading(null))//Post value is for changing live data from another thread.
-            response.postValue(retrofit.requestDefinition(word)) //Returns Resource.status.Status.SUCCESS or ERROR
+            try {
+                val request = api.requestDefinition(word,"d") //d means definition in api.
+                if(request.isSuccessful){
+                    request.body()?.let {
+                        response.postValue(Resource.success(it))
+                    }?: Resource.error("Error",null)
+                }else{
+                    response.postValue(Resource.error("Error",null))
+                }
+            }catch (e: Exception){
+                println("Error on request.")
+                response.postValue(Resource.error("Error",null))
+            }
         }
 
     }
