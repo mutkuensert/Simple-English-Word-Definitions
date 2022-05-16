@@ -31,3 +31,4 @@ enum class Status {
     //Addition to original after the line
     ,STANDBY
 }
+//Origin of Resource Class: https://blog.mindorks.com/mvvm-architecture-android-tutorial-for-beginners-step-by-step-guide
