@@ -6,12 +6,12 @@ import androidx.lifecycle.viewModelScope
 import com.mutkuensert.simpleenglishworddefinitions.model.MainModel
 import com.mutkuensert.simpleenglishworddefinitions.service.WordService
 import com.mutkuensert.simpleenglishworddefinitions.util.Resource
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
+@HiltViewModel
 class MainScreenViewModel @Inject constructor(val api: WordService) : ViewModel() {
     val response = MutableLiveData<Resource<List<MainModel>>>(Resource.standby(listOf(MainModel(null,null,null))))
 
