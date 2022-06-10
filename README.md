@@ -24,6 +24,7 @@ MVVM architecture has been used in development of this app. ([ViewModel](https:/
 * [Compose](https://developer.android.com/jetpack/compose/setup) - This link also includes Live Data dependency for Compose.
 * [Coroutines](https://developer.android.com/kotlin/coroutines) - To execute asynchronous tasks.
 * [Hilt](https://developer.android.com/training/dependency-injection/hilt-android) - Automatized dependency injection library.
+* [Hilt](https://dagger.dev/hilt/) - Hilt documentation on dagger.dev.
 * [Moshi](https://github.com/square/moshi/) - JSON library to parse JSON.
 * [Retrofit](https://square.github.io/retrofit/) - To make HTTP requests.
 * [ViewModel](https://developer.android.com/jetpack/androidx/releases/lifecycle) - Link for ViewModel dependencies.
